@@ -1,0 +1,22 @@
+.itemCardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 20vw;
+  height: 30vh;
+  background-color: red;
+  margin: 1%;
+  border-radius: 10px;
+}
+
+.itemCardImage {
+  width: 100px;
+  height: 100px;
+}
+
+.orderButton {
+  border-radius: 5px;
+  width: 15%;
+  height: 10%;
+}

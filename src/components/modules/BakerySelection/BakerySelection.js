@@ -10,19 +10,50 @@ const BAKERY_SELECTION = [
   {
     item: "brownie",
     price: "$10"
-  }
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
+  {
+    item: "brownie",
+    price: "$10"
+  },
 ]
 
 function BakerySelection(){
   const [bakerySelection, setBackerySelection] = useState(BAKERY_SELECTION);
 
-  useEffect(() => {
-    console.log("selection: ");
-  }, [])
-
   return (
-    <div>
-      <h1>bakery selection</h1>
+    <div className={styles.bakerySelectionContainer}>
       {bakerySelection.map(selection => <ItemCard item={selection.item} price={selection.price} />)}
     </div>
   )
