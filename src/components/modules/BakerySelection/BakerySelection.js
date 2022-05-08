@@ -23,7 +23,7 @@ function BakerySelection(){
 
   return (
     <div className={styles.bakerySelectionContainer}>
-      {bakerySelection.map(selection => <ItemCard item={selection.item} price={selection.price} />)}
+      {bakerySelection.map(selection => <ItemCard item={selection.item} price={selection.price} imageUrl={selection.imageUrl}/>)}
     </div>
   )
 }

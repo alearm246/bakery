@@ -9,6 +9,9 @@ function Checkout() {
   const [lastName, setLastName] = useState("");
   const [gradeLvl, setGradeLvl] = useState(0);
   const [quantity, setQuantity] = useState(0);
+  const [socialMedia, setSocialMedia] = useState("");
+  const [socialMediaHandle, setSocialMediaHandle] = useState("");
+  const [meetUpLocation, setMeetUpLocation] = useState("");
 
   const { item, price } = useParams();
 
@@ -21,25 +24,43 @@ function Checkout() {
       const customer = {
         firstName,
         lastName,
+        item,
         gradeLvl,
-        quantity
+        quantity,
+        socialMedia: socialMedia === "" ? socialMedia : socialMedia,
+        socialMediaHandle,
+        meetUpLocation
       };
+      console.log("social media: ", socialMedia)
 
       const response = await axios.post(envVars.customersSheets, customer);
+      console.log(response);
     } catch(err) {
       console.log(err);
     }
   }
 
+  useEffect(() => {
+    console.log("social media: ", typeof socialMedia)
+  }, [socialMedia])
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await sendToSheets()
+    sendToSheets()
+    setFirstName("");
+    setLastName("");
+    setGradeLvl(0);
+    setQuantity(0);
+    setSocialMedia("");
+    setSocialMediaHandle("");
+    setMeetUpLocation("");
   }
 
   return (
     <div className={styles.checkoutContainer}>
       <form className={styles.formContainer}>
-        <label>{item}</label>
+        <label className={styles.item}>{item}</label>
+        <br />
         <label>First name:</label><br />
         <input
           type="text"
@@ -53,22 +74,46 @@ function Checkout() {
           name="last name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-        />
+        /><br />
         <label>Grade level: </label><br />
+        <select className={styles.dropDown} value={gradeLvl} onChange={(e) => setGradeLvl(e.target.value)}>
+          <option value="9th">9th</option>
+          <option value="10th">10th</option>
+          <option value="11th">11th</option>
+          <option value="12th">12th</option>
+        </select>
+        <br />
+        <label>Social Media: </label><br />
+        <select className={styles.dropDown} value={socialMedia} onChange={(e) => setSocialMedia(e.target.value)}>
+          <option value="choose">choose</option>
+          <option value="instagram">instagram</option>
+          <option value="snapchat">snapchat</option>
+        </select>
+        <br />
+        <label>Social Media Handle:</label><br />
         <input
-          type="number"
-          name="grade level"
-          value={gradeLvl}
-          onChange={(e) => setGradeLvl(e.target.value)}
-        />
+          type="text"
+          name="social media handle"
+          value={socialMediaHandle}
+          onChange={(e) => setSocialMediaHandle(e.target.value)}
+        /><br />
+        <label>Meet Up Location:</label><br />
+        <input
+          type="text"
+          name="meet up location"
+          value={meetUpLocation}
+          onChange={(e) => setMeetUpLocation(e.target.value)}
+        /><br />
         <label>Quantity</label>
         <input
           type="number"
           name="quantity"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
-        />
-        <p>total price: {calculatePrice(price, quantity)}</p>
+          min="0"
+        /><br />
+        <p className={styles.price}>Total Price: ${calculatePrice(price, quantity)}</p>
+        <br />
         <button className={styles.button} onClick={handleSubmit}>pre-order</button>
       </form>
     </div>
