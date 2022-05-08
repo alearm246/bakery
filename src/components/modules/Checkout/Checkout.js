@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Checkout.module.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import envVars from "../../../config/environmentVars.js";
+import notifcation from "../../../utils/Notification";
 
 function Checkout() {
   const [firstName, setFirstName] = useState("");
@@ -12,6 +13,8 @@ function Checkout() {
   const [socialMedia, setSocialMedia] = useState("");
   const [socialMediaHandle, setSocialMediaHandle] = useState("");
   const [meetUpLocation, setMeetUpLocation] = useState("");
+
+  const form = useRef();
 
   const { item, price } = useParams();
 
@@ -31,7 +34,6 @@ function Checkout() {
         socialMediaHandle,
         meetUpLocation
       };
-      console.log("social media: ", socialMedia)
 
       const response = await axios.post(envVars.customersSheets, customer);
       console.log(response);
@@ -40,13 +42,7 @@ function Checkout() {
     }
   }
 
-  useEffect(() => {
-    console.log("social media: ", typeof socialMedia)
-  }, [socialMedia])
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    sendToSheets()
+  const clearForm = () => {
     setFirstName("");
     setLastName("");
     setGradeLvl(0);
@@ -56,9 +52,16 @@ function Checkout() {
     setMeetUpLocation("");
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    sendToSheets();
+    notifcation.sendEmail(form.current);
+    clearForm();
+  }
+
   return (
     <div className={styles.checkoutContainer}>
-      <form className={styles.formContainer}>
+      <form ref={form} className={styles.formContainer}>
         <label className={styles.item}>{item}</label>
         <br />
         <label>First name:</label><br />
@@ -76,7 +79,7 @@ function Checkout() {
           onChange={(e) => setLastName(e.target.value)}
         /><br />
         <label>Grade level: </label><br />
-        <select className={styles.dropDown} value={gradeLvl} onChange={(e) => setGradeLvl(e.target.value)}>
+        <select className={styles.dropDown} name="grade level" value={gradeLvl} onChange={(e) => setGradeLvl(e.target.value)}>
           <option value="9th">9th</option>
           <option value="10th">10th</option>
           <option value="11th">11th</option>
