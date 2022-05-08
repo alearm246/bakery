@@ -1,56 +1,25 @@
 import React, { useState, useEffect } from "react";
 import styles from "./BakerySelection.module.css";
 import ItemCard from "../../common/ItemCard/ItemCard.js";
-
-const BAKERY_SELECTION = [
-  {
-    item: "tres leches",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-  {
-    item: "brownie",
-    price: "$10"
-  },
-]
+import axios from "axios";
+import envVars from "../../../config/environmentVars.js";
 
 function BakerySelection(){
-  const [bakerySelection, setBackerySelection] = useState(BAKERY_SELECTION);
+  const [bakerySelection, setBackerySelection] = useState([]);
+
+  useEffect(() => {
+    const getBakeryItems = async () => {
+      try {
+        const response = await axios.get(envVars.bakeryItemsSheets);
+
+        setBackerySelection(response.data);
+      } catch(err) {
+        console.error(err);
+      }
+    }
+
+    getBakeryItems();
+  }, [])
 
   return (
     <div className={styles.bakerySelectionContainer}>
