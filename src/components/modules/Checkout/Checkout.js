@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Checkout.module.css";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import envVars from "../../../config/environmentVars.js";
 
 function Checkout() {
   const [firstName, setFirstName] = useState("");
@@ -11,12 +13,27 @@ function Checkout() {
   const { item, price } = useParams();
 
   const calculatePrice = (price, quantity) => {
-    const priceNum = parseInt(price.substring(1, price.length + 1));
-    return priceNum * parseInt(quantity);
+    return parseFloat(price) * parseFloat(quantity);
   }
 
-  const handleSubmit = (e) => {
+  const sendToSheets = async () => {
+    try {
+      const customer = {
+        firstName,
+        lastName,
+        gradeLvl,
+        quantity
+      };
+
+      const response = await axios.post(envVars.customersSheets, customer);
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await sendToSheets()
   }
 
   return (
